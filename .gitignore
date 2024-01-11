@@ -1,0 +1,4 @@
+.env
+*.jsonl
+*.log
+*.out
