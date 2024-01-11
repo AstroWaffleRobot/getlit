@@ -46,8 +46,15 @@ def upload_to_s3(file_path, bucket, object_name):
 
 
 def load_jsonl_file(file_path):
+    results = []
     with open(file_path, 'r') as file:
-        return [json.loads(line) for line in file]
+        for i, line in enumerate(file, 1):
+            try:
+                results.append(json.loads(line))
+            except json.JSONDecodeError as e:
+                print(f"Error decoding JSON on line {i}: {e}")
+                continue
+    return results
 
 def record_exists(master_records, new_record, unique_field='doi'):
     return any(new_record.get(unique_field) == master_record.get(unique_field) for master_record in master_records)
